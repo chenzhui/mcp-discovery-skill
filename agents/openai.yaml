@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCP Discovery"
+  short_description: "Discover and install MCPs for missing or inefficient workflows."
+  default_prompt: "Use $mcp-discovery-skill to find, evaluate, and install MCPs or skills for a missing or repetitive low-efficiency capability."
