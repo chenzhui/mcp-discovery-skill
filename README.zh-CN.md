@@ -13,6 +13,8 @@
 - Codex 当前缺少某项系统能力，直接影响任务推进。
 - Codex 虽然能做，但流程高频、重复、低效，已经值得评估专用 skill 或 MCP。
 
+这个 skill 刻意保持轻量。它的目标是尽快判断“值不值得引入新工具”，而不是每次都展开一轮很长的研究流程。
+
 ## Quick Start
 
 1. 克隆仓库。
@@ -49,6 +51,7 @@ cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
 - 不默认安装工具，而是先判断是否真的值得引入。
 - 帮助在 `手工方案 / skill / MCP` 三者之间做更合理的选择。
 - 尊重本地拒绝记录，避免用户已经明确拒绝后还反复触发同一类插件搜索。
+- 控制搜索深度，避免 agent 为便宜的小问题过度思考。
 
 ## 仓库结构
 
@@ -176,6 +179,7 @@ python scripts/discover_candidates.py "vmware workstation screenshot mcp" --limi
 - 真正更难、更值钱的是先判断“该不该装”。
 - 先做发现和评估，会让这个 skill 更小、更稳、更容易复用。
 - 如果用户已经说过不要装，就应该记住这个决定，而不是下一次又重复推荐同一类插件。
+- 工作流被刻意收紧，避免 skill 在不必要的地方浪费 token。
 
 ## License
 

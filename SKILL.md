@@ -1,160 +1,97 @@
 ---
 name: mcp-discovery-skill
-description: Discover and install MCP servers or Codex skills when Codex lacks a needed system capability, when an existing approach is too manual or low-efficiency for a high-frequency task, or when a specialized tool integration would materially reduce repeated effort. Use for capability gaps, repetitive low-leverage workflows, tool-market research, MCP/skill evaluation, and installation/configuration of promising candidates.
+description: Decide whether a missing capability or a repetitive low-efficiency workflow is worth solving with an MCP server or a Codex skill. Use when Codex lacks an important system capability, when the same manual workflow keeps recurring, or when the user explicitly asks to find or compare MCPs or skills. Do not use for one-off tasks that are already cheap to complete manually.
 ---
 
 # MCP Discovery Skill
 
-Use this skill to decide whether a missing or inefficient workflow should be solved by:
+Use this skill as a lightweight router, not a research project.
 
-- installing an MCP server
-- installing a Codex skill
-- keeping the task in the current toolchain
+Goal:
 
-## Trigger Conditions
+- decide whether to stay manual
+- decide whether to look for a skill
+- decide whether to look for an MCP
 
-Invoke this skill when any of the following is true:
+## Trigger
 
-- A task requires a capability not currently available in the tool list.
-- A task is possible with existing tools but would be slow, repetitive, or fragile if repeated.
-- A workflow is recurring often enough that manual execution is no longer justified.
-- The task would benefit from a specialized integration such as VM control, browser automation, package registries, cloud providers, databases, OCR, GUI automation, or device access.
-- The user explicitly asks to find, evaluate, install, or compare MCPs or skills.
+Invoke this skill only when at least one is true:
 
-## Default Workflow
+- Codex is missing a capability that matters for the task.
+- The same manual workflow is repeating and is no longer cheap.
+- The user explicitly asks to find, compare, or install an MCP or skill.
 
-0. Check whether the capability or workflow is already recorded in a local rejection registry. If the user previously rejected tool acquisition for the same problem, do not search again unless the user explicitly reopens the decision.
-1. Define the missing or inefficient capability in one sentence.
-2. Decide the desired acquisition target:
-   - prefer an `MCP` when the gap is access to an external system, API, desktop capability, hardware, or runtime integration
-   - prefer a `skill` when the gap is procedural knowledge, repeatable workflow guidance, lightweight helper scripts, or repo-local scaffolding
-3. Search public discovery sources. Start with [references/markets.md](./references/markets.md).
-4. Rank candidates using [references/evaluation.md](./references/evaluation.md).
-5. Prefer the smallest tool that closes the gap.
-6. Install or configure only after verifying:
-   - the candidate matches the actual need
-   - the repository appears maintained
-   - the install path fits the current environment
-7. After installation, validate the new capability with one real task.
+Do not invoke this skill for one-off work that is already easy.
+
+## Stop Conditions
+
+Check these before searching:
+
+1. If the user already rejected tool acquisition for this workflow, stop.
+2. If the workflow is cheap enough to keep manual, stop.
+3. If existing tools already solve the problem well enough, stop.
+
+If any stop condition applies, do not search for plugins.
 
 ## Rejection Registry
 
-Before searching, look for a local decision file such as `.mcp-discovery-decisions.json` in the current workspace or task root.
+Look for a local file such as `.mcp-discovery-decisions.json` in the workspace or task root.
 
-If the file exists and contains a matching rejection entry for the same capability, workflow, or plugin category:
+If it contains a matching rejection entry:
 
 - do not search again automatically
-- respect the prior rejection
-- continue with the manual path unless the user explicitly asks to revisit the decision
+- continue with the manual path
+- only reopen the search if the user explicitly asks to revisit the decision
 
-Use the example schema in [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json).
+Use [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json) as the schema template.
 
-Recommended matching policy:
+Matching priority:
 
-- exact capability name wins
-- workflow keywords are a fallback
-- broad categories should be used sparingly
+1. exact capability
+2. keyword overlap
+3. broad category match
 
-Examples of good rejection entries:
+## Minimal Workflow
 
-- `vmware screenshot mcp`
-- `desktop OCR plugin for invoice parsing`
-- `android emulator setup helper`
+1. Compress the problem into one sentence.
+2. Decide the target:
+   - prefer `MCP` for runtime/system/external integrations
+   - prefer `skill` for workflow knowledge, templates, or lightweight helper logic
+3. Run one search pass using [scripts/discover_candidates.py](./scripts/discover_candidates.py) or a direct web search.
+4. Keep at most 3 candidates.
+5. Pick one of these outputs:
+   - `stay manual`
+   - `install a skill`
+   - `install an MCP`
 
-Examples of explicit reopen prompts:
+Default to the smallest next step.
 
-- `Re-evaluate MCP options for VMware screenshots.`
-- `Search again even though I rejected this before.`
-- `The old rejection no longer applies.`
+## Search Limits
 
-## Search Procedure
+To avoid wasting tokens:
 
-Run [discover_candidates.py](./scripts/discover_candidates.py) first. It searches:
+- do one search round by default
+- only refine the query once if results are obviously noisy
+- do not produce long comparisons unless the user asks
+- do not keep searching after you already have one good candidate
 
-- `mcpworld.com`
-- GitHub repositories
+## Output Format
 
-Use queries built from:
+Return a short result in this shape:
 
-- the missing capability
-- the target system
-- the user-facing action
-- the expected transport or tool family
+1. decision
+2. brief reason
+3. next action
 
-Examples:
+Example:
 
-- `vmware workstation screenshot mcp`
-- `ocr desktop automation mcp`
-- `codex skill install github repo`
-- `android emulator mcp`
-- `database schema exploration skill`
-
-If the first pass is noisy, rerun with one of:
-
-- a product name
-- an API or protocol name
-- `mcp`
-- `codex skill`
-
-## Acquisition Rules
-
-### Install an MCP
-
-Choose an MCP when the solution needs runtime access to systems or capabilities that Codex does not already possess, such as:
-
-- virtualization platforms
-- browsers or desktop apps
-- mobile devices
-- SSH targets
-- cloud services
-- databases
-- package registries
-- OCR or local GUI control
-
-After selection:
-
-1. inspect the upstream install instructions
-2. install dependencies
-3. add or update the MCP entry in the Codex config
-4. note whether a restart is required
-5. validate with a minimal live call
-
-### Install a Skill
-
-Choose a skill when the solution is mostly reasoning workflow, repeatable decision logic, helper scripts, templates, or domain-specific guidance.
-
-After selection:
-
-1. prefer the local `skill-installer` workflow when the repo already contains a valid Codex skill
-2. otherwise clone or inspect the repo and verify the skill folder layout
-3. install into `$CODEX_HOME/skills`
-4. validate with one explicit invocation
-
-## Efficiency Trigger
-
-Do not wait for a total capability gap. Trigger this skill proactively when:
-
-- the same shell sequence is being repeated across turns
-- a workflow repeatedly requires manual page inspection or repetitive configuration edits
-- the task can be completed today, but only with brittle glue code or many manual steps
-- the task is likely to recur and a specialized tool would save time across future runs
-
-The threshold is qualitative: if a specialized integration would likely pay back within a few future uses, search for an MCP or skill.
-
-If the user has already rejected acquisition for that workflow, the rejection registry overrides this trigger until the user reopens the decision.
-
-## Validation
-
-Before closing the task:
-
-1. state why the chosen MCP or skill is a better fit than the current manual path
-2. confirm installation/configuration success
-3. verify the new capability on one concrete example
-4. note restart requirements or remaining limits
+- decision: `stay manual`
+- reason: `the workflow is rare and current tools already cover it`
+- next action: `do not search again unless the user reopens the decision`
 
 ## Resources
 
-- Market list and search starting points: [references/markets.md](./references/markets.md)
-- Candidate scoring checklist: [references/evaluation.md](./references/evaluation.md)
-- Candidate discovery helper: [scripts/discover_candidates.py](./scripts/discover_candidates.py)
-- Rejection registry example: [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json)
+- Markets: [references/markets.md](./references/markets.md)
+- Evaluation checklist: [references/evaluation.md](./references/evaluation.md)
+- Discovery helper: [scripts/discover_candidates.py](./scripts/discover_candidates.py)
+- Rejection registry template: [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json)

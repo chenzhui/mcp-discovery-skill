@@ -9,6 +9,8 @@ This skill is designed for two trigger patterns:
 - Codex is missing a capability that would materially help complete the task.
 - Codex can complete the task today, but the workflow is high-frequency, repetitive, or inefficient enough that a specialized MCP or skill should be considered.
 
+This skill is intentionally lightweight. Its job is to decide quickly whether a new tool is justified, not to run a long research workflow every time.
+
 ## Quick Start
 
 1. Clone the repository.
@@ -45,6 +47,7 @@ cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
 - Recommends the smallest useful tool instead of installing tools by default.
 - Helps decide whether the right answer is `manual`, `skill`, or `MCP`.
 - Respects a local rejection registry so previously declined plugin searches do not keep retriggering.
+- Limits search depth so the agent does not overthink cheap decisions.
 
 ## Repository Layout
 
@@ -172,6 +175,7 @@ Reason:
 - The harder problem is deciding whether a new tool is justified.
 - Defaulting to discovery and evaluation keeps the skill smaller, safer, and easier to reuse.
 - If the user has already said no, the skill should remember that and stop proposing the same plugin path repeatedly.
+- The workflow is intentionally capped so the skill does not burn tokens on unnecessary analysis.
 
 ## License
 
