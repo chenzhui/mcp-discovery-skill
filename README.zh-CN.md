@@ -27,6 +27,20 @@ git clone https://github.com/chenzhui/mcp-discovery-skill.git
 Copy-Item -Recurse .\mcp-discovery-skill "C:\Users\<你自己>\.codex\skills\public\"
 ```
 
+macOS 示例：
+
+```bash
+git clone https://github.com/chenzhui/mcp-discovery-skill.git
+cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
+```
+
+Linux 示例：
+
+```bash
+git clone https://github.com/chenzhui/mcp-discovery-skill.git
+cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
+```
+
 ## 它解决什么问题
 
 - 识别能力缺口和低效率重复流程。
@@ -74,8 +88,10 @@ mcp-discovery-skill/
 ### 作为本地 Codex skill 安装
 
 1. 找到你的 Codex skills 目录。
-   Windows 常见路径：
-   `C:\Users\<你自己>\.codex\skills\public\`
+   常见路径：
+   - Windows：`C:\Users\<你自己>\.codex\skills\public\`
+   - macOS：`$HOME/.codex/skills/public/`
+   - Linux：`$HOME/.codex/skills/public/`
 2. 把整个 `mcp-discovery-skill` 文件夹复制进去。
 3. 重启 Codex 或开启一个新会话。
 

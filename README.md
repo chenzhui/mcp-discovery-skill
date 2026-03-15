@@ -23,6 +23,20 @@ git clone https://github.com/chenzhui/mcp-discovery-skill.git
 Copy-Item -Recurse .\mcp-discovery-skill "C:\Users\<you>\.codex\skills\public\"
 ```
 
+macOS example:
+
+```bash
+git clone https://github.com/chenzhui/mcp-discovery-skill.git
+cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
+```
+
+Linux example:
+
+```bash
+git clone https://github.com/chenzhui/mcp-discovery-skill.git
+cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
+```
+
 ## What It Does
 
 - Identifies missing or low-efficiency capabilities.
@@ -70,8 +84,10 @@ These are starting points, not hard-coded authority rankings.
 ### Install as a local Codex skill
 
 1. Locate your Codex skills directory.
-   Typical path on Windows:
-   `C:\Users\<you>\.codex\skills\public\`
+   Typical paths:
+   - Windows: `C:\Users\<you>\.codex\skills\public\`
+   - macOS: `$HOME/.codex/skills/public/`
+   - Linux: `$HOME/.codex/skills/public/`
 2. Copy this entire `mcp-discovery-skill` folder into that directory.
 3. Restart Codex or start a new session.
 

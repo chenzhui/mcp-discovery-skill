@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="MCP Discovery logo">
+  <rect width="256" height="256" rx="48" fill="#0F766E"/>
+  <path d="M58 86h68c31.48 0 57 25.52 57 57s-25.52 57-57 57H98l-24 28v-28H58c-17.67 0-32-14.33-32-32v-50c0-17.67 14.33-32 32-32Z" fill="#ECFEFF"/>
+  <circle cx="180" cy="80" r="26" fill="#FDE68A"/>
+  <path d="m198 98 28 28" stroke="#FDE68A" stroke-width="14" stroke-linecap="round"/>
+  <path d="M82 122h48M82 146h70" stroke="#0F766E" stroke-width="12" stroke-linecap="round"/>
+</svg>
