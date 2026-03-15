@@ -14,6 +14,8 @@ Invoke only when:
 - A manual workflow is repetitive and inefficient.
 - The user explicitly asks to find/compare tools.
 
+Do not invoke this skill for one-off work that is already easy.
+
 ## Stop Conditions (Do Not Search)
 
 1. **Rejected**: User previously rejected this tool (check `.mcp-discovery-decisions.json`).
