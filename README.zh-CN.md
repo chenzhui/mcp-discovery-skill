@@ -13,6 +13,20 @@
 - Codex 当前缺少某项系统能力，直接影响任务推进。
 - Codex 虽然能做，但流程高频、重复、低效，已经值得评估专用 skill 或 MCP。
 
+## Quick Start
+
+1. 克隆仓库。
+2. 把 `mcp-discovery-skill` 文件夹复制到 Codex skills 目录。
+3. 重启 Codex。
+4. 当你遇到能力缺口，或遇到高频低效流程时，显式调用 `$mcp-discovery-skill`。
+
+Windows 示例：
+
+```powershell
+git clone https://github.com/chenzhui/mcp-discovery-skill.git
+Copy-Item -Recurse .\mcp-discovery-skill "C:\Users\<你自己>\.codex\skills\public\"
+```
+
 ## 它解决什么问题
 
 - 识别能力缺口和低效率重复流程。
@@ -115,4 +129,4 @@ python scripts/discover_candidates.py "vmware workstation screenshot mcp" --limi
 
 ## License
 
-当前仓库还没有附带 license 文件。如果你希望别人明确知道复用边界，建议后续补一个许可证。
+MIT。见 [LICENSE](./LICENSE)。

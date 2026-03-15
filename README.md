@@ -9,6 +9,20 @@ This skill is designed for two trigger patterns:
 - Codex is missing a capability that would materially help complete the task.
 - Codex can complete the task today, but the workflow is high-frequency, repetitive, or inefficient enough that a specialized MCP or skill should be considered.
 
+## Quick Start
+
+1. Clone the repository.
+2. Copy the `mcp-discovery-skill` folder into your Codex skills directory.
+3. Restart Codex.
+4. Invoke `$mcp-discovery-skill` when you hit a capability gap or a repetitive low-efficiency workflow.
+
+Windows example:
+
+```powershell
+git clone https://github.com/chenzhui/mcp-discovery-skill.git
+Copy-Item -Recurse .\mcp-discovery-skill "C:\Users\<you>\.codex\skills\public\"
+```
+
 ## What It Does
 
 - Identifies missing or low-efficiency capabilities.
@@ -111,4 +125,4 @@ Reason:
 
 ## License
 
-No license file is included yet. Add one if you want downstream reuse terms to be explicit.
+MIT. See [LICENSE](./LICENSE).
