@@ -151,7 +151,7 @@ def parse_args() -> argparse.Namespace:
         default="auto",
         help="Target acquisition type",
     )
-    parser.add_argument("--limit", type=int, default=8, help="Max results per source")
+    parser.add_argument("--limit", type=int, default=5, help="Max results per source")
     parser.add_argument("--json", action="store_true", help="Emit JSON")
     return parser.parse_args()
 
@@ -179,7 +179,10 @@ def render_markdown(results: List[Candidate], query: str, kind: str) -> str:
         "|---|---:|---:|---|---|---|",
     ]
     for item in results:
-        summary = item.summary.replace("|", "\\|")
+        raw_summary = item.summary
+        if len(raw_summary) > 180:
+            raw_summary = raw_summary[:179] + "…"
+        summary = raw_summary.replace("|", "\\|")
         lines.append(
             f"| {item.source} | {item.kind} | {item.score_hint} | {item.name} | {item.url} | {summary} |"
         )
