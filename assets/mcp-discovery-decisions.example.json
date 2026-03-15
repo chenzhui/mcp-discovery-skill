@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "rejected": [
+    {
+      "capability": "vmware workstation screenshots",
+      "kind": "mcp",
+      "keywords": ["vmware", "screenshot", "workstation"],
+      "reason": "User prefers the current manual path and does not want a plugin for this workflow.",
+      "scope": "workspace",
+      "revisit_only_if_user_requests": true
+    }
+  ]
+}

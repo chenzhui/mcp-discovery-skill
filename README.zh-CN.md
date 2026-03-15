@@ -48,6 +48,7 @@ cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
 - 评估候选 MCP 与 skill。
 - 不默认安装工具，而是先判断是否真的值得引入。
 - 帮助在 `手工方案 / skill / MCP` 三者之间做更合理的选择。
+- 尊重本地拒绝记录，避免用户已经明确拒绝后还反复触发同一类插件搜索。
 
 ## 仓库结构
 
@@ -109,6 +110,38 @@ git clone https://github.com/chenzhui/mcp-discovery-skill.git
 
 然后把整个文件夹复制到你的 Codex skills 目录，再重启 Codex。
 
+## 拒绝记录
+
+如果用户已经明确拒绝为某个流程安装 MCP 或 skill，建议把这个决定写进本地文件，例如：
+
+```text
+.mcp-discovery-decisions.json
+```
+
+现在这个 skill 会把这个文件当作覆盖规则。后面再次遇到同类能力需求时，不应该再自动反复搜索插件，除非用户明确要求重新评估。
+
+示例：
+
+```json
+{
+  "version": 1,
+  "rejected": [
+    {
+      "capability": "vmware workstation screenshots",
+      "kind": "mcp",
+      "keywords": ["vmware", "screenshot", "workstation"],
+      "reason": "用户已经拒绝为这个流程安装插件。",
+      "scope": "workspace",
+      "revisit_only_if_user_requests": true
+    }
+  ]
+}
+```
+
+模板文件：
+
+- [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json)
+
 ## 使用方式
 
 需要时显式调用：
@@ -142,6 +175,7 @@ python scripts/discover_candidates.py "vmware workstation screenshot mcp" --limi
 - 强一些的 agent 往往已经能自己阅读安装文档并完成安装。
 - 真正更难、更值钱的是先判断“该不该装”。
 - 先做发现和评估，会让这个 skill 更小、更稳、更容易复用。
+- 如果用户已经说过不要装，就应该记住这个决定，而不是下一次又重复推荐同一类插件。
 
 ## License
 

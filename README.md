@@ -44,6 +44,7 @@ cp -R ./mcp-discovery-skill "$HOME/.codex/skills/public/"
 - Evaluates candidate MCPs and skills.
 - Recommends the smallest useful tool instead of installing tools by default.
 - Helps decide whether the right answer is `manual`, `skill`, or `MCP`.
+- Respects a local rejection registry so previously declined plugin searches do not keep retriggering.
 
 ## Repository Layout
 
@@ -105,6 +106,38 @@ git clone https://github.com/chenzhui/mcp-discovery-skill.git
 
 Then copy the folder into your Codex skills directory and restart Codex.
 
+## Rejection Memory
+
+If a user rejects installing an MCP or skill for a specific workflow, record that decision in a local file such as:
+
+```text
+.mcp-discovery-decisions.json
+```
+
+The skill now treats that file as an override. If the same capability shows up again, it should not keep searching for plugins unless the user explicitly asks to revisit the decision.
+
+Example template:
+
+```json
+{
+  "version": 1,
+  "rejected": [
+    {
+      "capability": "vmware workstation screenshots",
+      "kind": "mcp",
+      "keywords": ["vmware", "screenshot", "workstation"],
+      "reason": "User rejected plugin installation for this workflow.",
+      "scope": "workspace",
+      "revisit_only_if_user_requests": true
+    }
+  ]
+}
+```
+
+Template file:
+
+- [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json)
+
 ## Usage
 
 Invoke it explicitly when needed:
@@ -138,6 +171,7 @@ Reason:
 - Strong agents can usually read installation documentation and install the selected tool directly.
 - The harder problem is deciding whether a new tool is justified.
 - Defaulting to discovery and evaluation keeps the skill smaller, safer, and easier to reuse.
+- If the user has already said no, the skill should remember that and stop proposing the same plugin path repeatedly.
 
 ## License
 

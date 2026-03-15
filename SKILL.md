@@ -23,6 +23,7 @@ Invoke this skill when any of the following is true:
 
 ## Default Workflow
 
+0. Check whether the capability or workflow is already recorded in a local rejection registry. If the user previously rejected tool acquisition for the same problem, do not search again unless the user explicitly reopens the decision.
 1. Define the missing or inefficient capability in one sentence.
 2. Decide the desired acquisition target:
    - prefer an `MCP` when the gap is access to an external system, API, desktop capability, hardware, or runtime integration
@@ -35,6 +36,36 @@ Invoke this skill when any of the following is true:
    - the repository appears maintained
    - the install path fits the current environment
 7. After installation, validate the new capability with one real task.
+
+## Rejection Registry
+
+Before searching, look for a local decision file such as `.mcp-discovery-decisions.json` in the current workspace or task root.
+
+If the file exists and contains a matching rejection entry for the same capability, workflow, or plugin category:
+
+- do not search again automatically
+- respect the prior rejection
+- continue with the manual path unless the user explicitly asks to revisit the decision
+
+Use the example schema in [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json).
+
+Recommended matching policy:
+
+- exact capability name wins
+- workflow keywords are a fallback
+- broad categories should be used sparingly
+
+Examples of good rejection entries:
+
+- `vmware screenshot mcp`
+- `desktop OCR plugin for invoice parsing`
+- `android emulator setup helper`
+
+Examples of explicit reopen prompts:
+
+- `Re-evaluate MCP options for VMware screenshots.`
+- `Search again even though I rejected this before.`
+- `The old rejection no longer applies.`
 
 ## Search Procedure
 
@@ -110,6 +141,8 @@ Do not wait for a total capability gap. Trigger this skill proactively when:
 
 The threshold is qualitative: if a specialized integration would likely pay back within a few future uses, search for an MCP or skill.
 
+If the user has already rejected acquisition for that workflow, the rejection registry overrides this trigger until the user reopens the decision.
+
 ## Validation
 
 Before closing the task:
@@ -124,3 +157,4 @@ Before closing the task:
 - Market list and search starting points: [references/markets.md](./references/markets.md)
 - Candidate scoring checklist: [references/evaluation.md](./references/evaluation.md)
 - Candidate discovery helper: [scripts/discover_candidates.py](./scripts/discover_candidates.py)
+- Rejection registry example: [assets/mcp-discovery-decisions.example.json](./assets/mcp-discovery-decisions.example.json)
